@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   late String _coinName;
   String _languageChoice = "en";
   late Map _exchangeRates;
+  TextEditingController searchBarController = TextEditingController();
 
   _HomePageState() {
     //Default Settings
@@ -46,13 +47,33 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _selectedCoinDropdown(),
+                _searchBar(),
                 _dataWidgets(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _searchBar() {
+    return TextField(
+      controller: searchBarController,
+      decoration: InputDecoration(
+          fillColor: Colors.white,
+          suffix: IconButton(onPressed: () {
+            setState(() {
+
+            });
+          }, icon: const Icon(Icons.search)),
+          hintText: "What cryptocurrency do you want to see?",
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              width: 4,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+          )),
     );
   }
 
@@ -110,8 +131,7 @@ class _HomePageState extends State<HomePage> {
             String _coinDescribe = _data["description"][_languageChoice];
 
             //Exchange Rates
-            _exchangeRates =
-            _data["market_data"]["current_price"];
+            _exchangeRates = _data["market_data"]["current_price"];
 
             if (_coinDescribe == "") {
               _coinDescribe =
@@ -241,10 +261,13 @@ class _HomePageState extends State<HomePage> {
         children: [
           ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext _context) {
-                  return ExchangeRateScreen(rates: _exchangeRates, name: _coinName);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (BuildContext _context) {
+                  return ExchangeRateScreen(
+                      rates: _exchangeRates, name: _coinName);
                 }));
-              }, child: const Text("See Exchange Rates")),
+              },
+              child: const Text("See Exchange Rates")),
           DropdownButton(
             items: _languages,
             value: _languageChoice,
