@@ -40,16 +40,18 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _searchBar(),
-                _dataWidgets(),
-              ],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _searchBar(),
+                  _dataWidgets(),
+                ],
+              ),
             ),
           ),
         ),
@@ -58,22 +60,48 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _searchBar() {
-    return TextField(
-      controller: searchBarController,
-      decoration: InputDecoration(
-          fillColor: Colors.white,
-          suffix: IconButton(onPressed: () {
-            setState(() {
-
-            });
-          }, icon: const Icon(Icons.search)),
-          hintText: "What cryptocurrency do you want to see?",
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 4,
+    return SizedBox(
+      width: 350,
+      child: TextField(
+        controller: searchBarController,
+        decoration: InputDecoration(
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          label: const Text(
+            "Search Bar",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
-          )),
+          ),
+          fillColor: Colors.white,
+          suffix: IconButton(
+              onPressed: () {
+                setState(() {
+                  //Remove Keyboard after Pressing Search Icon
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                  _coinName = searchBarController.text.toLowerCase();
+                });
+              },
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
+              )),
+          hintText: "What cryptocurrency do you want to see?",
+          // border: const OutlineInputBorder(
+          //   borderSide: BorderSide(
+          //     width: 2,
+          //   ),
+          //   borderRadius: BorderRadius.all(Radius.circular(30.0)),
+        ),
+      ),
     );
   }
 
